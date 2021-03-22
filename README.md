@@ -21,9 +21,11 @@
 
 ### On clicking "Geocode" button, the app will perform geocoding using MapBox Api. 
 
+![Screenshot](build/static/media/Screenshots/3.png)
 
+### Gif video. 
 
-
+![Screenshot](build/static/media/Screenshots/geogoding.gif)
 
 
 Command <b>npm run build`</b> builds the app for production to the `build` folder.<br>
