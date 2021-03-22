@@ -1,0 +1,11 @@
+li{
+	list-style-type: decimal; 
+}
+
+/*  ----------- Mobile -------*/
+@media screen and (max-width: 640px) {
+
+}  
+ 
+	
+	

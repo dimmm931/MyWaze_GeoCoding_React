@@ -1,0 +1,44 @@
+.textarea-my{
+	width:100%;
+	margin-top:0;
+	/* padding: 2em; */
+}
+
+#coordsInput{
+	width:100%;
+}
+
+.textarea-my .btn{
+  display:block;
+}
+
+/*  ------------ Mobile -----*/
+@media screen and (max-width: 640px) {
+
+}  
+		
+#tableResults{
+	padding-bottom:3em;
+}
+td {
+	width:100px;
+}
+
+/* padding in div */
+#resultFinal{
+	padding:2em;
+} 
+
+.App {  
+   /* transition-duration: 5s; */
+}
+
+.blur{
+	transition-duration: 1s;
+	-moz-filter: blur(15px);
+     -ms-filter: blur(15px);
+     -o-filter: blur(15px);
+     -webkit-filter: blur(15px);
+     filter: blur(15px);
+	}
+	

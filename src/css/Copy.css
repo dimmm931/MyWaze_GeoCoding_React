@@ -1,0 +1,17 @@
+#copyButton{
+	margin-top: 0em;
+    display:none;
+	margin-bottom:4em;
+	}
+
+#copy_loading{display:none;} /* gif for copy */
+
+/*  ----------------Mobile */
+@media screen and (max-width: 640px) {
+	.textarea-my .btn{ 
+     }
+}  
+ 
+
+	
+	

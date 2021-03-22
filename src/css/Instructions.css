@@ -1,0 +1,14 @@
+.instructions{
+	display:none;
+	width:100%;
+	background:#ebebe0;
+	padding:1em;
+	margin-top:1em;
+}
+
+.link{font-size:18px;}
+
+/* Fixes Instruction div overlapping the Buttons */
+#hiddenInstructions{
+	clear:both;
+} 

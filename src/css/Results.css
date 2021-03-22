@@ -1,0 +1,7 @@
+.results{
+	padding-left:10px;
+	background:#f5f5f0;
+	margin-bottom:0.2em; /* space to Copy Button */
+	clear:both;
+	 display:none; /* fixing free space */
+}

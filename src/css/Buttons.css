@@ -1,0 +1,10 @@
+.buttons{
+	margin-top:1em;  float: left;
+ }
+.buttons .el{
+	margin-left:0.1em;margin-bottom:0.2em;
+ }
+
+.buttons :after {
+    clear: both;
+}

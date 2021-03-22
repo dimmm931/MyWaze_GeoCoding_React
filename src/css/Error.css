@@ -1,0 +1,19 @@
+/* gif for error */
+.error-parent{
+	display:none;
+	position:absolute;
+	top:3em; left:28%;
+	overflow:hidden; /* no scroll to shake page */
+	} 
+
+.error-img{width:70%;}
+	
+/*------------ Mobile --------*/
+@media screen and (max-width: 640px) {
+	.error-parent{top:2em; left:2%;}
+	.error-img{width:99%;}
+
+}  
+
+	
+	
