@@ -16,7 +16,8 @@ class ButtonsLayout extends Component {
   }
   
   exampleClick() {
-     $("#coordsInput").val(this.state.sampleCoordinates);
+     //$("#coordsInput").val(this.state.sampleCoordinates);
+	 this.props.liftsampleCoordsHandler(this.state.sampleCoordinates); //uplift sampleCoordinates to parent App.js
   }
   
    clearClick() {
@@ -40,7 +41,8 @@ class ButtonsLayout extends Component {
    }
   
   render() {
-      var clearStateHandler =  this.props.clearStateHandler ; // lifting state up to parent
+      var clearStateHandler =  this.props.clearStateHandler; //lifting state up to parent
+	  var handleToUpdate  = this.props.handleToUpdate
       return (
 	  
 	    <div className="buttons">

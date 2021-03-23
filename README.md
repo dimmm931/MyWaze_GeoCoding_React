@@ -1,10 +1,11 @@
 
-## Waze Geocoding on React Library 2017
+## Waze Geocoding on React JS
 
-- <p>A React application for geocoding, transforms bundle of addresses into coordinates using MapBox Api.</p>
+- <p>A React application for geocoding, transforms a bundle of addresses into coordinates using MapBox Api.</p>
 - <p>App works on React library, to run the application on <b>http://localhost:3000</b>, copy the repository code and run <b>npm install</b> to load all dependencies. </p>
 - <p>Then use <b>npm start</b> to run the app on <b>http://localhost:3000</b>.
 - <p>Use command <b>npm run build</b> to build the app for production to the `build` folder, while source code to edit is located in <b>/src</b> folder.</p>
+- <p>Rename <b>.env_example</b> to <b>.env</b> and enter your MapBox Api access token (address MapBox to get one if you don't have yet )</p>
 
 - <p>If you need to repack or edit the application, in order to be able to edit js files, copy the repository and run <b>npm install</b> to load all dependencies. </p>
 - <p>To pack with Browserify use command <b>gulp browserifyX</b> or <b> npm browserify js/my_crypto_main_js_file.js -o dist/js/bundle_js.js -d </b></p>

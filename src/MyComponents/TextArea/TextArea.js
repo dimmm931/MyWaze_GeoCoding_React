@@ -10,8 +10,10 @@ class TextAreaX extends Component {
 	constructor(props) {
         super(props);
         this.state = {
-		    addressArray: [],  //this state will hold array with separ addresses from textarea input
+		    addressArray: [],     //this state will hold array with separ addresses from textarea input
 		    coordinateArray: [],  //this state will hold array with ready coordinates returned by axios
+			textAreaInputX: '',   //textarea input
+			
         };
  
         // This binding is necessary to make `this` work in the callback
@@ -23,11 +25,32 @@ class TextAreaX extends Component {
     }
   
   
+    componentDidMount(){
+	    //swal("Start!", "Mount", "error");
+    }
+	
+	//Updating state on props change (when user clicks "Example" button)
+	componentWillReceiveProps(nextProps) {
+        // You don't have to do this check first, but it can help prevent an unneeded render
+        if (nextProps.exampleCoord !== this.state.textAreaInputX) {
+            this.setState({ textAreaInputX: nextProps.exampleCoord });
+        }
+    }
+	
+	
+	//textarea input handle
+	handleTextAreaChange(event){
+     this.setState({textAreaInputX: event.target.value})  
+    }
+	 
     //just runs all functions together
-    // **************************************************************************************
+    // ***,***********************************************************************************
     // **************************************************************************************
     //                                                                                     **
     run_This_Component_Functions_In_Queue() {
+		
+		this.props.liftIfAjaxWasSuccessHandler(false); //send to App.js state (reset on start)
+		
 	    var promises = [];  //array that will hold all promises
 	    var temp = [];     // temp array to store found coordinates before assigning it to this.state.coordinateArray
 	
@@ -44,8 +67,10 @@ class TextAreaX extends Component {
 		   
 		    $(".error-parent").fadeOut(1000); //hide error gif from <Error/>
 			*/
-           	swal("Failed!", "No input", "error"); 
+           	
+			
 
+           
 
 
 		    //display error text with function
@@ -53,7 +78,7 @@ class TextAreaX extends Component {
 		  
 		    //calling parent method from child {this.props. + method}-> passing/uplifting array with found coords to App.js, method is described in Parent App.js
 		    this.props.liftFinalCoordsHandler([]); //sending empty array to reset this.state.arg1 in <App/>.js. Otherwise, when u found coordinates by texarea input and get the result and then solved to empty the input and click the "Geocode" button, the sign "Empty input" will appear, but table with prev coords result will stay
-
+            this.props.liftErrorMsgHandler("You submitted Empty Input");
 		    return false; 
 	    }
 	  
@@ -81,6 +106,9 @@ class TextAreaX extends Component {
 			   
 		       this.props.techInfoHandler("final state Promise.all length " + this.state.coordinateArray[0].length + " Array contains: " + this.state.coordinateArray[0]);   
 		       this.props.liftFinalCoordsHandler(this.state.coordinateArray); 
+			   this.props.liftIfAjaxWasSuccessHandler(true);       //send to App.js state
+			   this.props.liftErrorMsgHandler("Request was successfull"); //send to App.js state
+
 	  
           })
 		  //Start Addon---
@@ -88,19 +116,24 @@ class TextAreaX extends Component {
 		     // calling parent method from child {this.props. + method}-> passing/uplifting array with found coords to App.js, method is described in Parent App.js
 		     //this.props.liftFinalCoordsHandler(this.state.coordinateArray[0])/*('Lifted_Coords_Array')*/;//!!!!!!!!!!!!!
 		     //Draw the result
+			 
 		     //this.drawResult();  //reassigned to <Result/>, now result is drawn from state.arg1 in App.js
+			  //HTML Result div with animation-------
+              this.showResultDiv();
 			 
-			 
-			  // HTML  Result div  with  animation-------
-              $("#resultFinal").stop().fadeOut("slow",function(){ 
-              }).fadeIn(2000);
-              $("#resultFinal").css("border","1px solid red"); 
-		      $("#copyButton").css("display","block");
 	 
 		  })
 		  //END Addon----
           .catch((e) => {
              // handle errors here
+			 //Final SweetAlert goes here!!!!!!!!!!!!!!!!!!!!
+			 swal("Failed!", "MapBox request crashed", "error"); 
+
+			 this.props.liftErrorMsgHandler("Sorry, there was an error, check your input-2");
+			 this.props.liftIfAjaxWasSuccessHandler(false);//send to App.js state
+              //HTML Result div with animation-------
+              this.showResultDiv();
+			
           });
 	   // END all promises
 	  
@@ -110,16 +143,17 @@ class TextAreaX extends Component {
   
 
   
-  //gets the textarea value, split it to arraye and set to state
-  // **************************************************************************************
-  // **************************************************************************************
-  //                                                                                     **
-  getFormValue(){
-		 
-	  if ($("#coordsInput").val().trim()===""){
-         return false;		 
-	   }
+    //gets the textarea value, split it to arraye and set to state
+    getFormValue(){
+	    if (this.state.textAreaInputX.trim()=== ""){
+			swal("Failed!", "No input", "error"); 
+            return false;		 
+	    }
 	   
+	     if (this.state.textAreaInputX.length < 6){
+			//swal("Failed!", "Input must be more than 4 chars", "error"); 
+            //return false;		 
+	    }
 	   
 	   //check if "You submitted Empty Input" error sign exists and remove it if it does exists. it is done to prevent this sign to appear again if further input is not empty. Otherwise, new table coors result will appear, but error sign will remain on the screen
 	   if ($(".errorSign").length){
@@ -178,11 +212,12 @@ class TextAreaX extends Component {
               alert("forStart DELAY  " + this.state.addressArray[0].length); 
            }, 3000);*/
 		 
-		   
+		   alert("Key token " + process.env.REACT_APP_WEATHER_API_KEY);
 		   //alert("forStart  " + this.state.addressArray[0].length);
 		   for (let j = 0; j < this.state.addressArray[0].length; j++) { //alert("for " + this.state.addressArray[0][j]);
-                promises.push(axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.addressArray[0][j] + '.json?country=us&access_token=pk.eyJ1IjoiYWNjb3VudDkzMSIsImEiOiJjaXgwOTVuOTEwMGFxMnVsczRwOWx0czhnIn0.YjZ5bpnh6jqTEk7cCJfrzw')   
+                promises.push(axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.addressArray[0][j] + '.json?country=us&access_token=' + process.env.REACT_APP_WEATHER_API_KEY)   
                .then(function (response) {
+				   
                    //alert(JSON.stringify(response, null, 4)); 
                    //alert(response.data.features[0].center[1] +  ' = ' + response.data.features[0].center[0]);	
                     temp.push(response.data.features[0].center[1], response.data.features[0].center[0]);
@@ -193,11 +228,18 @@ class TextAreaX extends Component {
                     //alert("temp all Final " + temp);	  
                 })
 				
-			   .catch(function() { 
-                    //alert('Error. This ajax iteration failed.');
-				    swal("Failed!", "This ajax iteration failed", "error"); 
-					temp.push("Sorry, there was an error, check your input");
-               })//;
+			   .catch(function(errX) { 
+			        //console.log(errX.response.data.message);
+			        //alert(JSON.stringify(errX, null, 4));
+                   //alert('Error. This ajax iteration failed.');
+				   //swal("Failed!", "This ajax iteration failed", "error"); 
+				   //temp.push("Sorry, there was an error, check your input");
+				   if(errX.response.data.message.match(/Authorized/g)){
+					   this.props.liftErrorMsgHandler("Not Authorized. Your request is missing MapBox access token");
+				   } else {
+					   this.props.liftErrorMsgHandler("Sorry, there was an error, check your input");
+				   }
+               })
 			   ); //end push		
 		   }
 		    
@@ -290,39 +332,50 @@ class TextAreaX extends Component {
    
    
    
-   //Logic to Html the result with function
-  // **************************************************************************************
-  // **************************************************************************************
-  //                                                                                     **
-  htmlAnyResult(textX){ //resultFinal
+   
+  /*
+  |--------------------------------------------------------------------------
+  | Logic to Html the result with function
+  |--------------------------------------------------------------------------
+  |
+  |
+  */
+  htmlAnyResult(textX){ 
 	  $("#resultFinal").stop().fadeOut("slow",function(){ 
             $(this).append(textX)   //use .append() instead of .html() to remove this <h2> error sign if texarea input is not empty
        }).fadeIn(11000);
 
        $("#resultFinal").css("border","1px solid red"); //  set  red  border  for  result  div 
   }
-   // **                                                                                  **
-   // **                                                                                  **
-   // **************************************************************************************
-   // **************************************************************************************
    
   
+  /*
+  |--------------------------------------------------------------------------
+  | Show Result Div
+  |--------------------------------------------------------------------------
+  |
+  |
+  */
+  showResultDiv(){ 
+	  $("#resultFinal").stop().fadeOut("slow",function(){ 
+      }).fadeIn(2000);
+      $("#resultFinal").css("border","1px solid red"); 
+	  $("#copyButton").css("display","block");
+  }
+   
   
   
   
   //RENDER ------------------------------------------------
   render() {
-      //var liftFinalCoordsHandler  =   this.props.liftFinalCoordsHandler ; //for lifting state up to parent
 	  
       return (
 	   
 	     <div>
 	         <CopyLayout/>
 	         <form className="textarea-my" >
-                 <textarea id="coordsInput" rows="8" cols="80" placeholder="Your address here to geocode..." /> 
-                 <input type="button" className="btn btn-primary btn-md" value="Geocode" id="splitButton" onClick={this.run_This_Component_Functions_In_Queue} />
-					 {/*<input type="button"  value="Lift Coords" onClick={() => liftFinalCoordsHandler('Lifted_TextArea')}/> */}
-				  
+                 <textarea id="coordsInput" rows="8" cols="80" placeholder="Your address here to geocode..." value={this.state.textAreaInputX} onChange={this.handleTextAreaChange.bind(this)} /> 
+                 <input type="button" className="btn btn-primary btn-md" value="Geocode" id="splitButton" onClick={this.run_This_Component_Functions_In_Queue} />	
              </form>
 		
 		</div>

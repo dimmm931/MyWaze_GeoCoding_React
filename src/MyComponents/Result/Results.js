@@ -57,14 +57,18 @@ class Results extends Component {
 	     this.run_Result();
          return (
 	         <div className="results" id="resultFinal">
+			   <p className="errMsg"> {this.props.errorMsg} </p> {/* error message */}
 			   
-		       <p className='red'> React Results found =>  {this.props.resultX.length/2}  </p>
-			   <table id='tableResults'>{/* adding id that will be copied further */}
-			      <tbody>{/* acaused crash without tbody nesting*/}
-	              {/*  final  results  go  there  */} 
-		          {this.constructed_answer2 }
-			      </tbody>
-			   </table>
+			   <div className={this.props.ifAjaxOk ? 'visible-div' : 'hidden-div'}> 
+		         <p className='red'> React Results found =>  {this.props.resultX.length/2}</p>
+			     <table id='tableResults'>{/* adding id that will be copied further */}
+			       <tbody>{/* caused crash without tbody nesting */}
+	               {/*  final  results  go  there  */} 
+		           {this.constructed_answer2}
+			        </tbody>
+			     </table>
+			   </div>
+			   
              </div>
 	  
          );
