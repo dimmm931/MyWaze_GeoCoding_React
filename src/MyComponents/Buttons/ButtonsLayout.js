@@ -21,7 +21,7 @@ class ButtonsLayout extends Component {
   }
   
    clearClick() {
-     $("#coordsInput").val("");
+     this.props.liftsampleCoordsHandler('');//$("#coordsInput").val("");
 	 $("#resultFinal").hide(1000);
 	 $("#hiddenInstructions").hide(1000);
 	 $("#instructionButton").val("instructions");

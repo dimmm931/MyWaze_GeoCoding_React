@@ -27,7 +27,7 @@ class Results extends Component {
 	     //checks if passes props is array or string  
 	     if(typeof this.props.resultX === 'string' ) { 
 		     flag = false;
-		     this.constructed_answer2 = <p> {this.props.resultX}</p>;
+		     //this.constructed_answer2 = "";//<span> {this.props.resultX}</span>;
 			 return false; //new breaking
 				 
 	     } else {

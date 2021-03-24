@@ -14,19 +14,19 @@
 
 ## Brief overview of application
 
-![Screenshot](build/static/media/Screenshots/1.png)
+![Screenshot](src/images/Screenshots/1.png)
 
 ### Enter addresses to geocode line by line
 
-![Screenshot](build/static/media/Screenshots/2.png)
+![Screenshot](src/images/Screenshots/2.png)
 
 ### On clicking "Geocode" button, the app will perform geocoding using MapBox Api. 
 
-![Screenshot](build/static/media/Screenshots/3.png)
+![Screenshot](src/images/Screenshots/3.png)
 
 ### Gif video. 
 
-![Screenshot](build/static/media/Screenshots/geogoding.gif)
+![Screenshot](src/images/Screenshots/geogoding.gif)
 
 
 Command <b>npm run build`</b> builds the app for production to the `build` folder.<br>

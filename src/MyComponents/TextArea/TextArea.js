@@ -10,10 +10,10 @@ class TextAreaX extends Component {
 	constructor(props) {
         super(props);
         this.state = {
-		    addressArray: [],     //this state will hold array with separ addresses from textarea input
-		    coordinateArray: [],  //this state will hold array with ready coordinates returned by axios
-			textAreaInputX: '',   //textarea input
-			
+		    addressArray: [],       //this state will hold array with separ addresses from textarea input
+		    coordinateArray: [],    //this state will hold array with ready coordinates returned by axios
+			textAreaInputX: '',     //textarea input
+			tempoTextAreaInputX: '' //fix for example coords
         };
  
         // This binding is necessary to make `this` work in the callback
@@ -27,19 +27,21 @@ class TextAreaX extends Component {
   
     componentDidMount(){
 	    //swal("Start!", "Mount", "error");
+		//let mapBoxKey = process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN;
     }
 	
 	//Updating state on props change (when user clicks "Example" button)
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps) { 
         // You don't have to do this check first, but it can help prevent an unneeded render
-        if (nextProps.exampleCoord !== this.state.textAreaInputX) {
-            this.setState({ textAreaInputX: nextProps.exampleCoord });
+        if (nextProps.exampleCoord !== this.state.tempoTextAreaInputX) { alert(221);
+			this.setState({ tempoTextAreaInputX: nextProps.exampleCoord });
+            this.setState({ textAreaInputX:      nextProps.exampleCoord }); 
         }
     }
 	
 	
 	//textarea input handle
-	handleTextAreaChange(event){
+	handleTextAreaChange(event){ 
      this.setState({textAreaInputX: event.target.value})  
     }
 	 
@@ -85,8 +87,10 @@ class TextAreaX extends Component {
         //Resetting state to Null ,calling parent method from child {this.props. + method}-> passing/uplifting alert info, described in Parent App.js
 	    this.props.reset_techInfo_State("x");
 	
+	    var thatX = this;
+		
 	    //run axios ajax in loop
-	    this.runAjax(promises, temp); //must pass {promises,temp} as arg to make them visible in function runAjax()//!!!!!!! RETURN ME===============
+	    this.runAjax(promises, temp, thatX); //must pass {promises,temp} as arg to make them visible in function runAjax()//!!!!!!! RETURN ME===============
 	  
 	  //All promises, The way to detect that all axios ajax were completed. 1. we add {var promises = [];} 2. {promises.push(every ajax)}
 	  //runs when for loop iteration axios ajax request are completed
@@ -107,7 +111,7 @@ class TextAreaX extends Component {
 		       this.props.techInfoHandler("final state Promise.all length " + this.state.coordinateArray[0].length + " Array contains: " + this.state.coordinateArray[0]);   
 		       this.props.liftFinalCoordsHandler(this.state.coordinateArray); 
 			   this.props.liftIfAjaxWasSuccessHandler(true);       //send to App.js state
-			   this.props.liftErrorMsgHandler("Request was successfull"); //send to App.js state
+			   //this.props.liftErrorMsgHandler("Request was successfull"); //send to App.js state
 
 	  
           })
@@ -129,9 +133,11 @@ class TextAreaX extends Component {
 			 //Final SweetAlert goes here!!!!!!!!!!!!!!!!!!!!
 			 swal("Failed!", "MapBox request crashed", "error"); 
 
-			 this.props.liftErrorMsgHandler("Sorry, there was an error, check your input-2");
+             alert(JSON.stringify(e, null, 4)); 
+
+			 //this.props.liftErrorMsgHandler("Sorry, there was an error, check your input-2");
 			 this.props.liftIfAjaxWasSuccessHandler(false);//send to App.js state
-              //HTML Result div with animation-------
+             //HTML Result div with animation-------
               this.showResultDiv();
 			
           });
@@ -163,7 +169,7 @@ class TextAreaX extends Component {
 
 
 
-	   let textareaX = $("#coordsInput").val(); //alert(textarea);
+	   let textareaX = this.state.textAreaInputX; //$("#coordsInput").val(); //alert(textarea);
        textareaX = textareaX.trim();
 	   let arrayX2 = textareaX.split('\n');
 	   
@@ -202,7 +208,7 @@ class TextAreaX extends Component {
    // **************************************************************************************
    // **************************************************************************************
    //                                                                                     **
-       runAjax(promises, temp) { //must accept args {(promises,temp)} while calling in run_This_Component_Functions_In_Queue() 
+       runAjax(promises, temp, thatX) { //must accept args {(promises,temp)} while calling in run_This_Component_Functions_In_Queue() 
 		   //var temp = []; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!! VISIBILITY
 		  // var promises = []; //add array to use in Promise.all(promises
 		   $("#loading").fadeIn(200); //show preloader
@@ -211,34 +217,46 @@ class TextAreaX extends Component {
 		    /*setTimeout(() => {
               alert("forStart DELAY  " + this.state.addressArray[0].length); 
            }, 3000);*/
-		 
-		   alert("Key token " + process.env.REACT_APP_WEATHER_API_KEY);
+		   
+		   
+		   alert("Key token " + process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN);
 		   //alert("forStart  " + this.state.addressArray[0].length);
 		   for (let j = 0; j < this.state.addressArray[0].length; j++) { //alert("for " + this.state.addressArray[0][j]);
-                promises.push(axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.addressArray[0][j] + '.json?country=us&access_token=' + process.env.REACT_APP_WEATHER_API_KEY)   
+                promises.push(axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.addressArray[0][j] + '.json?country=us&access_token=' + process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN)   
                .then(function (response) {
-				   
-                   //alert(JSON.stringify(response, null, 4)); 
-                   //alert(response.data.features[0].center[1] +  ' = ' + response.data.features[0].center[0]);	
-                    temp.push(response.data.features[0].center[1], response.data.features[0].center[0]);
-                    //alert("inside" + temp);	
-                    					
+				       //alert('RESPPP');
+					   console.log(response)
+					   if(response.statusText == "OK"){
+					   
+                           temp.push(response.data.features[0].center[1], response.data.features[0].center[0]);
+                       	   thatX.props.liftErrorMsgHandler("Request was successfull"); //send to App.js state
+	
+					   } else { 
+						   	thatX.props.liftErrorMsgHandler("Sorry, there was an error, check your input");
+
+					   }						   
                 })
 				.then(function (response) { //not neccessary to use this .then, just a test
                     //alert("temp all Final " + temp);	  
                 })
 				
 			   .catch(function(errX) { 
-			        //console.log(errX.response.data.message);
+			    
+				    thatX.props.liftErrorMsgHandler("Sorry, there was an error, check your input-6");
+			        alert('hy  ' +errX.response.data.message);
 			        //alert(JSON.stringify(errX, null, 4));
                    //alert('Error. This ajax iteration failed.');
 				   //swal("Failed!", "This ajax iteration failed", "error"); 
 				   //temp.push("Sorry, there was an error, check your input");
-				   if(errX.response.data.message.match(/Authorized/g)){
-					   this.props.liftErrorMsgHandler("Not Authorized. Your request is missing MapBox access token");
-				   } else {
-					   this.props.liftErrorMsgHandler("Sorry, there was an error, check your input");
+				   if(errX.response.data.message == null ){  alert(6);
+					   thatX.props.liftErrorMsgHandler("Sorry, there was an error, check your input-3");
 				   }
+				   if(errX.response.data.message && errX.response.data.message.toString().match(/Not Authorized/g)){ 
+				       thatX.props.liftErrorMsgHandler("Error: Not Authorized - Please provide MapBox access token");
+				   } else { 
+					   thatX.props.liftErrorMsgHandler("Sorry, there was an error, check your input");
+				   }
+				   
                })
 			   ); //end push		
 		   }
@@ -274,9 +292,7 @@ class TextAreaX extends Component {
 		  
 		 
 
-		  //alert('out-> for loop is over, but ajax axios is not finished. That"s why array temp is underfined ' + temp);
-		  //instead of alert, it calls parent method from child {this.props. + method}-> passing/uplifting alert info to method techInfoHandler described in Parent App.js
-	      this.props.techInfoHandler('out-> for loop is over, but ajax axios is not finished. That"s why array temp is underfined ' + temp); 
+	      //this.props.techInfoHandler('out-> for loop is over, but ajax axios is not finished. That"s why array temp is underfined ' + temp); 
 	   
 		  //setTimeout( "alert('out ' + temp)", 2000); 
 		   
@@ -373,6 +389,7 @@ class TextAreaX extends Component {
 	   
 	     <div>
 	         <CopyLayout/>
+			 <p>{this.state.textAreaInputX}</p>
 	         <form className="textarea-my" >
                  <textarea id="coordsInput" rows="8" cols="80" placeholder="Your address here to geocode..." value={this.state.textAreaInputX} onChange={this.handleTextAreaChange.bind(this)} /> 
                  <input type="button" className="btn btn-primary btn-md" value="Geocode" id="splitButton" onClick={this.run_This_Component_Functions_In_Queue} />	
