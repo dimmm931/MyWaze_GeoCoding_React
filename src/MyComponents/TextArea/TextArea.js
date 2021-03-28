@@ -12,8 +12,8 @@ class TextAreaX extends Component {
         this.state = {
 		    addressArray: [],       //this state will hold array with separ addresses from textarea input
 		    coordinateArray: [],    //this state will hold array with ready coordinates returned by axios
-			textAreaInputX: '',     //textarea input
-			tempoTextAreaInputX: '' //fix for example coords
+		    textAreaInputX: '',     //textarea input
+		    tempoTextAreaInputX: '' //fix for example coords
         };
  
         // This binding is necessary to make `this` work in the callback
@@ -34,7 +34,7 @@ class TextAreaX extends Component {
 	componentWillReceiveProps(nextProps) { 
         // You don't have to do this check first, but it can help prevent an unneeded render
         if (nextProps.exampleCoord !== this.state.tempoTextAreaInputX) { alert(221);
-			this.setState({ tempoTextAreaInputX: nextProps.exampleCoord });
+		    this.setState({ tempoTextAreaInputX: nextProps.exampleCoord });
             this.setState({ textAreaInputX:      nextProps.exampleCoord }); 
         }
     }
@@ -42,7 +42,7 @@ class TextAreaX extends Component {
 	
 	//textarea input handle
 	handleTextAreaChange(event){ 
-     this.setState({textAreaInputX: event.target.value})  
+        this.setState({textAreaInputX: event.target.value})  
     }
 	 
     //just runs all functions together
@@ -51,7 +51,7 @@ class TextAreaX extends Component {
     //                                                                                     **
     run_This_Component_Functions_In_Queue() {
 		
-		this.props.liftIfAjaxWasSuccessHandler(false); //send to App.js state (reset on start)
+	    this.props.liftIfAjaxWasSuccessHandler(false); //send to App.js state (reset on start)
 		
 	    var promises = [];  //array that will hold all promises
 	    var temp = [];     // temp array to store found coordinates before assigning it to this.state.coordinateArray
@@ -117,13 +117,13 @@ class TextAreaX extends Component {
           })
 		  //Start Addon---
 		  .then(() => {
-		     // calling parent method from child {this.props. + method}-> passing/uplifting array with found coords to App.js, method is described in Parent App.js
-		     //this.props.liftFinalCoordsHandler(this.state.coordinateArray[0])/*('Lifted_Coords_Array')*/;//!!!!!!!!!!!!!
-		     //Draw the result
-			 
-		     //this.drawResult();  //reassigned to <Result/>, now result is drawn from state.arg1 in App.js
-			  //HTML Result div with animation-------
-              this.showResultDiv();
+		       // calling parent method from child {this.props. + method}-> passing/uplifting array with found coords to App.js, method is described in Parent App.js
+		       //this.props.liftFinalCoordsHandler(this.state.coordinateArray[0])/*('Lifted_Coords_Array')*/;//!!!!!!!!!!!!!
+		       //Draw the result
+			   
+		       //this.drawResult();  //reassigned to <Result/>, now result is drawn from state.arg1 in App.js
+			   //HTML Result div with animation-------
+               this.showResultDiv();
 			 
 	 
 		  })
