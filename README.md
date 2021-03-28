@@ -4,7 +4,7 @@
 - <p>A React application for geocoding, transforms a bundle of addresses into coordinates using MapBox Api.</p>
 - <p>App works on React library, to run the application on <b>http://localhost:3000</b>, copy the repository code and run <b>npm install</b> to load all dependencies. </p>
 - <p>Then use <b>npm start</b> to run the app on <b>http://localhost:3000</b>.
-- <p>Use command <b>npm run build</b> to build the app for production to the `build` folder, while source code to edit is located in <b>/src</b> folder.</p>
+- <p>Use command <b>`npm run build`</b> to build the app for production to the `build` folder, while source code to edit is located in <b>/src</b> folder.</p>
 - <p>Rename <b>.env_example</b> to <b>.env</b> and enter your MapBox Api access token (address MapBox to get one if you don't have yet )</p>
 
 - <p>If you need to repack or edit the application, in order to be able to edit js files, copy the repository and run <b>npm install</b> to load all dependencies. </p>
@@ -12,7 +12,7 @@
 - <p>To watch changes use <b> npm run watch-js </b></p>
 - <p>If encounter errors while repacking, install Browserify & Gulp globally: use  <b>npm uninstall browserify -g</b>, then <b>npm install browserify -g</b> and <b>npm install --global gulp-cli</b>
 
-## Brief overview of application
+## Brief overview of the application
 
 ![Screenshot](src/images/Screenshots/1.png)
 
@@ -23,6 +23,12 @@
 ### On clicking "Geocode" button, the app will perform geocoding using MapBox Api. 
 
 ![Screenshot](src/images/Screenshots/3.png)
+
+### Displaying errors if any. 
+
+![Screenshot](src/images/Screenshots/6.png)
+
+![Screenshot](src/images/Screenshots/7.png)
 
 ### Gif video. 
 

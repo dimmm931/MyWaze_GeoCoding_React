@@ -3,21 +3,16 @@ import '../../css/Results.css';
 import $ from 'jquery';
 
 class Results extends Component {
-	  constructed_answer2 = '';
 	  constructor(props) {
           super(props);
 		  this.state = {  
             //flag: true,	
-            //count: 0,			
           };
-          //var handleToUpdate = this.handleToUpdate.bind(this);  //for catching lifted state from LiftedFrom_Component
 	      this.run_Result = this.run_Result.bind(this);
       } 
 	
 	  componentDidMount() {} 
 	 
-	  
-	  
       //constructs  result based on passed this.props.resultX
       run_Result(){
 	     $("#loading").fadeOut(1900); //hide preloader
@@ -28,23 +23,21 @@ class Results extends Component {
 	     if(typeof this.props.resultX === 'string' ) { 
 		     flag = false;
 		     //this.constructed_answer2 = "";//<span> {this.props.resultX}</span>;
-			 return false; //new breaking
+			 return false; 
 				 
 	     } else {
 		
-	         //console.log(this.props.resultX[0]);
-             this.constructed_answer2 = this.props.resultX.map((coords, i, arrayX) =>{ {/* maps() args=>(content, iterator, arryitself)*/}
+             this.constructed_answer2 = this.props.resultX.map((coords, i, arrayX) =>{ 
 	             if (i%2 === 0) {
 	                 return(
                        <tr key={coords.toString()}>
 			             <td>
-		                {coords} 
-				        </td>
-				   
-				        <td>
-				        {arrayX[i + 1]}  {/* next coors from array */}
-				        </td>
-		                </tr>
+		                 {coords} 
+				         </td>
+				         <td>
+				         {arrayX[i + 1]}  {/* next coors from array */}
+				         </td>
+		               </tr>
 		             );
 		         }
             });

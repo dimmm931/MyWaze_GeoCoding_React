@@ -20,20 +20,15 @@ class TextAreaX extends Component {
 	    this.run_This_Component_Functions_In_Queue = this.run_This_Component_Functions_In_Queue.bind(this); //runs all functions together
 	    this.getFormValue = this.getFormValue.bind(this);
         this.runAjax = this.runAjax.bind(this);
-	    this.drawResult = this.drawResult.bind(this);
 	    this.htmlAnyResult = this.htmlAnyResult.bind(this);
     }
   
   
-    componentDidMount(){
-	    //swal("Start!", "Mount", "error");
-		//let mapBoxKey = process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN;
-    }
+    componentDidMount(){}
 	
 	//Updating state on props change (when user clicks "Example" button)
 	componentWillReceiveProps(nextProps) { 
-        // You don't have to do this check first, but it can help prevent an unneeded render
-        if (nextProps.exampleCoord !== this.state.tempoTextAreaInputX) { alert(221);
+        if (nextProps.exampleCoord !== this.state.tempoTextAreaInputX) { 
 		    this.setState({ tempoTextAreaInputX: nextProps.exampleCoord });
             this.setState({ textAreaInputX:      nextProps.exampleCoord }); 
         }
@@ -45,10 +40,14 @@ class TextAreaX extends Component {
         this.setState({textAreaInputX: event.target.value})  
     }
 	 
-    //just runs all functions together
-    // ***,***********************************************************************************
-    // **************************************************************************************
-    //                                                                                     **
+   
+    /*
+    |--------------------------------------------------------------------------
+    | just runs all functions together
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
     run_This_Component_Functions_In_Queue() {
 		
 	    this.props.liftIfAjaxWasSuccessHandler(false); //send to App.js state (reset on start)
@@ -58,25 +57,10 @@ class TextAreaX extends Component {
 	
 	    //if texarea is empty, stop anything further, show/hide <Error/> component
 	    if(this.getFormValue() === false) {
-		    //$("html, body").animate({ scrollTop: 0 }, "slow"); //scroll the page to top(mostly for mobile convenience)
-            //$('.App').addClass('blur');  //blur the background
-			/*
-		    $(".error-parent").fadeIn(500); //show error gif from <Error/>
-		
-		    setTimeout(function(){
-                $('.App').removeClass('blur'); //removes blur from background
-            }, 100); // A delay of 1000ms
 		   
-		    $(".error-parent").fadeOut(1000); //hide error gif from <Error/>
-			*/
-           	
-			
-
-           
-
-
 		    //display error text with function
-		    this.htmlAnyResult("<h2 class='red errorSign'>You submitted Empty Input</h2>");
+		    //this.htmlAnyResult("<h2 class='red errorSign'>You submitted Empty Input</h2>");
+            this.showResultDiv();
 		  
 		    //calling parent method from child {this.props. + method}-> passing/uplifting array with found coords to App.js, method is described in Parent App.js
 		    this.props.liftFinalCoordsHandler([]); //sending empty array to reset this.state.arg1 in <App/>.js. Otherwise, when u found coordinates by texarea input and get the result and then solved to empty the input and click the "Geocode" button, the sign "Empty input" will appear, but table with prev coords result will stay
@@ -92,64 +76,39 @@ class TextAreaX extends Component {
 	    //run axios ajax in loop
 	    this.runAjax(promises, temp, thatX); //must pass {promises,temp} as arg to make them visible in function runAjax()//!!!!!!! RETURN ME===============
 	  
-	  //All promises, The way to detect that all axios ajax were completed. 1. we add {var promises = [];} 2. {promises.push(every ajax)}
-	  //runs when for loop iteration axios ajax request are completed
-	  Promise.all(promises)
-          .then(() => {
-		       this.props.techInfoHandler("all promises " + temp);   /*('Lifted_Coords_Array')*/
+	    //All promises, The way to detect that all axios ajax were completed. 1. we add {var promises = [];} 2. {promises.push(every ajax)}
+	    //runs when for loop iteration axios ajax requests are completed
+	    Promise.all(promises)
+            .then(() => {
+		        this.props.techInfoHandler("all promises " + temp); 
 	  
-			   //adding array with with final ajax coordinates to this.state---------
-	           let coordsTempArray = this.state.coordinateArray; // =[]; //getting state to array	
-               coordsTempArray.push(temp); //adds to array in this way: addressArray = [[arrayX2]];	
+			    //adding array with with final ajax coordinates to this.state---------
+	            let coordsTempArray = this.state.coordinateArray; 
+                coordsTempArray.push(temp); //addressArray = [[arrayX2]];	
                
-			   this.setState({ //sets new value to state
-                   coordinateArray: temp 
-               }); 
-			   
-		
+			    this.setState({ 
+                    coordinateArray: temp 
+                }); 
 			   
 		       this.props.techInfoHandler("final state Promise.all length " + this.state.coordinateArray[0].length + " Array contains: " + this.state.coordinateArray[0]);   
 		       this.props.liftFinalCoordsHandler(this.state.coordinateArray); 
 			   this.props.liftIfAjaxWasSuccessHandler(true);       //send to App.js state
-			   //this.props.liftErrorMsgHandler("Request was successfull"); //send to App.js state
-
 	  
-          })
-		  //Start Addon---
-		  .then(() => {
-		       // calling parent method from child {this.props. + method}-> passing/uplifting array with found coords to App.js, method is described in Parent App.js
-		       //this.props.liftFinalCoordsHandler(this.state.coordinateArray[0])/*('Lifted_Coords_Array')*/;//!!!!!!!!!!!!!
-		       //Draw the result
-			   
-		       //this.drawResult();  //reassigned to <Result/>, now result is drawn from state.arg1 in App.js
-			   //HTML Result div with animation-------
+            })
+		    .then(() => {
                this.showResultDiv();
-			 
-	 
-		  })
-		  //END Addon----
-          .catch((e) => {
-             // handle errors here
-			 //Final SweetAlert goes here!!!!!!!!!!!!!!!!!!!!
-			 swal("Failed!", "MapBox request crashed", "error"); 
-
-             alert(JSON.stringify(e, null, 4)); 
-
-			 //this.props.liftErrorMsgHandler("Sorry, there was an error, check your input-2");
-			 this.props.liftIfAjaxWasSuccessHandler(false);//send to App.js state
-             //HTML Result div with animation-------
-              this.showResultDiv();
-			
-          });
-	   // END all promises
-	  
-  }
+		    })
+            .catch((e) => {
+			    //Final SweetAlert goes here!!!!!!!!!!!!!!!!!!!!
+			    swal("Failed!", "MapBox request crashed", "error"); 
+			    this.props.liftIfAjaxWasSuccessHandler(false);//send to App.js state
+                //HTML Result div with animation-------
+                this.showResultDiv();
+            });	  
+    }
   
   
-  
-
-  
-    //gets the textarea value, split it to arraye and set to state
+    //gets the textarea value, split it to array and set to state
     getFormValue(){
 	    if (this.state.textAreaInputX.trim()=== ""){
 			swal("Failed!", "No input", "error"); 
@@ -157,8 +116,8 @@ class TextAreaX extends Component {
 	    }
 	   
 	     if (this.state.textAreaInputX.length < 6){
-			//swal("Failed!", "Input must be more than 4 chars", "error"); 
-            //return false;		 
+			swal("Failed!", "Input must be more than 4 chars", "error"); 
+            return false;		 
 	    }
 	   
 	   //check if "You submitted Empty Input" error sign exists and remove it if it does exists. it is done to prevent this sign to appear again if further input is not empty. Otherwise, new table coors result will appear, but error sign will remain on the screen
@@ -168,237 +127,108 @@ class TextAreaX extends Component {
        }
 
 
-
-	   let textareaX = this.state.textAreaInputX; //$("#coordsInput").val(); //alert(textarea);
+	   let textareaX = this.state.textAreaInputX; 
        textareaX = textareaX.trim();
 	   let arrayX2 = textareaX.split('\n');
-	   
-	   //alert(arrayX2);  //reassigned to this.props.techInfoHandler
-	   //instead of alert, it calls parent method from child {this.props. + method}-> passing/uplifting alert info to method techInfoHandler described in Parent App.js
 	   this.props.techInfoHandler("arrayX2: " + arrayX2);   
 	   
-	 
-	   
-	   //adding arraay with address to state---------!!!!!!!!!!!!! ERRORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR=================================
-	   let addressTempArray = this.state.addressArray; //getting state to array
-	   /*addressTempArray.forEach(item => {  //this is var if u want to add existing array new values
-           addressTempArray.push(arrayX2); 
-       });
-	   */
+	   let addressTempArray = this.state.addressArray; 
 	   addressTempArray.unshift(arrayX2); //adds to array in this way: addressArray = [[arrayX2]]; //MEGA FIX, change push() to unshift()
-	   //alert("9999cccc addressTempArray[0].length " + addressTempArray[0].length + " consists=> " +  addressTempArray[0] );
 	   
-	   
-       this.setState({ //sets new value to state
-           addressArray:addressTempArray/*[0]*/ // arrayX2 //addressTempArray[0]
+       this.setState({ 
+           addressArray:addressTempArray
        }); 
-	   
-
  
-  }
-  // **                                                                                  **
-  // **                                                                                  **
-  // **************************************************************************************
-  // **************************************************************************************
+    }
    
    
    
    
-   //runs axios ajax
-   // **************************************************************************************
-   // **************************************************************************************
-   //                                                                                     **
-       runAjax(promises, temp, thatX) { //must accept args {(promises,temp)} while calling in run_This_Component_Functions_In_Queue() 
-		   //var temp = []; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!! VISIBILITY
-		  // var promises = []; //add array to use in Promise.all(promises
-		   $("#loading").fadeIn(200); //show preloader
-		   
-		    //working TimeOut
-		    /*setTimeout(() => {
-              alert("forStart DELAY  " + this.state.addressArray[0].length); 
-           }, 3000);*/
-		   
-		   
-		   alert("Key token " + process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN);
-		   //alert("forStart  " + this.state.addressArray[0].length);
-		   for (let j = 0; j < this.state.addressArray[0].length; j++) { //alert("for " + this.state.addressArray[0][j]);
-                promises.push(axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.addressArray[0][j] + '.json?country=us&access_token=' + process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN)   
-               .then(function (response) {
-				       //alert('RESPPP');
-					   console.log(response)
-					   if(response.statusText == "OK"){
-					   
-                           temp.push(response.data.features[0].center[1], response.data.features[0].center[0]);
-                       	   thatX.props.liftErrorMsgHandler("Request was successfull"); //send to App.js state
+   
+   /*
+    |--------------------------------------------------------------------------
+    | runs axios ajax
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    runAjax(promises, temp, thatX) { //must accept args {(promises, temp, thatX)}
+		$("#loading").fadeIn(200); //show preloader
 	
-					   } else { 
-						   	thatX.props.liftErrorMsgHandler("Sorry, there was an error, check your input");
+		for (let j = 0; j < this.state.addressArray[0].length; j++) { 
+            promises.push(axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.addressArray[0][j] + '.json?country=us&access_token=' + process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN)   
+            .then(function (response) {
+			    if(response.statusText == "OK"){
+                    temp.push(response.data.features[0].center[1], response.data.features[0].center[0]);
+                    thatX.props.liftErrorMsgHandler("Request was successfull"); //send to App.js state
+			    } else { 
+					thatX.props.liftErrorMsgHandler("Sorry, there was an error, check your input");
 
-					   }						   
-                })
-				.then(function (response) { //not neccessary to use this .then, just a test
-                    //alert("temp all Final " + temp);	  
-                })
+			    }						   
+            })
+		    .then(function (response) { 
+            })
 				
-			   .catch(function(errX) { 
-			    
-				    thatX.props.liftErrorMsgHandler("Sorry, there was an error, check your input-6");
-			        alert('hy  ' +errX.response.data.message);
-			        //alert(JSON.stringify(errX, null, 4));
-                   //alert('Error. This ajax iteration failed.');
-				   //swal("Failed!", "This ajax iteration failed", "error"); 
-				   //temp.push("Sorry, there was an error, check your input");
-				   if(errX.response.data.message == null ){  alert(6);
-					   thatX.props.liftErrorMsgHandler("Sorry, there was an error, check your input-3");
-				   }
-				   if(errX.response.data.message && errX.response.data.message.toString().match(/Not Authorized/g)){ 
-				       thatX.props.liftErrorMsgHandler("Error: Not Authorized - Please provide MapBox access token");
-				   } else { 
-					   thatX.props.liftErrorMsgHandler("Sorry, there was an error, check your input");
-				   }
+			.catch(function(errX) { 
+				thatX.props.liftErrorMsgHandler("Sorry, there was an error, check your input"); //fires here
+				if(errX.response.data.message == null ){  
+					thatX.props.liftErrorMsgHandler("Sorry, there was an error, check your input-3");
+				}
+				if(errX.response.data.message && errX.response.data.message.toString().match(/Not Authorized/g)){ 
+				    thatX.props.liftErrorMsgHandler("Error: Not Authorized - Please provide MapBox access token");
+				} else { 
+					thatX.props.liftErrorMsgHandler("Sorry, there was an error, check your input");
+				}
 				   
-               })
-			   ); //end push		
-		   }
-		    
-			//alert("temp all Final " + temp);
-			
-			
-		
-		
-		
-		
-		
-	  //All promises, The way to detect that all axios ajax were completed. 1. we add {var promises = [];} 2. {promises.push(every ajax)}
-	  /*
-	  Promise.all(promises)
-          .then(() => {
-               alert("all promises " + temp);
-			   //adding array with with final ajax coordinates to state---------
-	           const coordsTempArray = this.state.coordinateArray; //getting state to array	
-               coordsTempArray.push(temp); //adds to array in this way: addressArray = [[arrayX2]];	
-               this.setState({ //sets new value to state
-                   coordinateArray: coordsTempArray
-               }); 
-		   alert("final state Promise.all  " + this.state.coordinateArray[0]);
-		   this.drawResult();
-	  
-          })
-          .catch((e) => {
-             // handle errors here
-          });
-		*/
-	   // END all promises
-		  
-		 
+            })
+			);	
+		}
+    }
+   
+   
+   
+   /*
+   |--------------------------------------------------------------------------
+   | Logic to Html the result with function
+   |--------------------------------------------------------------------------
+   |
+   |
+   */
+    htmlAnyResult(textX){ 
+	    $("#resultFinal").stop().fadeOut("slow",function(){ 
+            $(this).append(textX);   //use .append() instead of .html() to remove this <h2> error sign if texarea input is not empty
+        }).fadeIn(11000);
 
-	      //this.props.techInfoHandler('out-> for loop is over, but ajax axios is not finished. That"s why array temp is underfined ' + temp); 
-	   
-		  //setTimeout( "alert('out ' + temp)", 2000); 
-		   
-					
-	   }
-   // **                                                                                  **
-   // **                                                                                  **
-   // **************************************************************************************
-   // **************************************************************************************
+        $("#resultFinal").css("border","1px solid red"); 
+    }
    
-   
-   
-   //gets the textarea value, split it to arraye and set to state -> NOT USED ->reassigned to <Result/> using state values
-  // **************************************************************************************
-  // **************************************************************************************
-  //                                                                                     **
-  drawResult(){
-       $("#loading").fadeOut(1900); //hide preloader
-	   
-	   //alert("draw  " + this.state.coordinateArray[0] + " has length " + this.state.coordinateArray[0].length);
-	   //instead of alert, it calls parent method from child {this.props. + method}-> passing/uplifting alert info to method techInfoHandler described in Parent App.js
-	   this.props.techInfoHandler("draw:  " + this.state.coordinateArray[0] + " has length " + this.state.coordinateArray[0].length); 
-	   
-       let b = this.state.coordinateArray;
-	   //alert("in DRAW: b length " + b.length + " - b[0]  " + b[0].length + " - " + b);
-       let res = "<p class='red'>React Results found => " + this.state.coordinateArray/*[0]*/.length/2 + "</p>"; //must be at least empty defined to avoid "undefined" appearance
-       //res += <CopyLayout/>;  { /* CopyLayout component */ }
-	   //res += "<input type='button' value='Copy' id='copybutton' onClick={CopyLayout.copy_table_result}><span id='flashMessage'></span>"; //copy button
-	   res += "<table id='tableResults'>"; //adding div that will be copied further
-	   
-	   for (let i = 0; i < this.state.coordinateArray/*[0]*/.length; i++){
-		   if(i % 2 === 0){
-	       res += "<tr><td>" +  this.state.coordinateArray/*[0]*/[i] + "</td><td> " +  this.state.coordinateArray/*[0]*/[i+1] + "<td></tr>";
-		   }
-       }
-	   
-	   res += "</table>";
-	   
-	   // HTML  Result div  with  animation;
-        $("#resultFinal").stop().fadeOut("slow",function(){ 
-            $(this).html(res)
+   /*
+    |--------------------------------------------------------------------------
+    | Show Result Div
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    showResultDiv(){ 
+	    $("#resultFinal").stop().fadeOut("slow",function(){ 
         }).fadeIn(2000);
-
-        $("#resultFinal").css("border","1px solid red"); //  set  red  border  for  result  div
-		
-		$("#copyButton").css("display","block");
-		
-   }
-   // **                                                                                  **
-   // **                                                                                  **
-   // **************************************************************************************
-   // **************************************************************************************
-   
-   
-   
-   
-  /*
-  |--------------------------------------------------------------------------
-  | Logic to Html the result with function
-  |--------------------------------------------------------------------------
-  |
-  |
-  */
-  htmlAnyResult(textX){ 
-	  $("#resultFinal").stop().fadeOut("slow",function(){ 
-            $(this).append(textX)   //use .append() instead of .html() to remove this <h2> error sign if texarea input is not empty
-       }).fadeIn(11000);
-
-       $("#resultFinal").css("border","1px solid red"); //  set  red  border  for  result  div 
-  }
+        $("#resultFinal").css("border","1px solid red"); 
+	    $("#copyButton").css("display","block");
+    }
    
   
-  /*
-  |--------------------------------------------------------------------------
-  | Show Result Div
-  |--------------------------------------------------------------------------
-  |
-  |
-  */
-  showResultDiv(){ 
-	  $("#resultFinal").stop().fadeOut("slow",function(){ 
-      }).fadeIn(2000);
-      $("#resultFinal").css("border","1px solid red"); 
-	  $("#copyButton").css("display","block");
-  }
-   
-  
-  
-  
-  //RENDER ------------------------------------------------
-  render() {
-	  
-      return (
-	   
-	     <div>
-	         <CopyLayout/>
-			 <p>{this.state.textAreaInputX}</p>
-	         <form className="textarea-my" >
-                 <textarea id="coordsInput" rows="8" cols="80" placeholder="Your address here to geocode..." value={this.state.textAreaInputX} onChange={this.handleTextAreaChange.bind(this)} /> 
-                 <input type="button" className="btn btn-primary btn-md" value="Geocode" id="splitButton" onClick={this.run_This_Component_Functions_In_Queue} />	
+    //RENDER ------------------------------------------------
+    render() {
+        return (
+	      <div>
+	        <CopyLayout/>
+	        <form className="textarea-my" >
+              <textarea id="coordsInput" rows="8" cols="80" placeholder="Your address here to geocode..." value={this.state.textAreaInputX} onChange={this.handleTextAreaChange.bind(this)} /> 
+              <input type="button" className="btn btn-primary btn-md" value="Geocode" id="splitButton" onClick={this.run_This_Component_Functions_In_Queue} />	
              </form>
-		
-		</div>
-	  
-    );
-  }
+		  </div> 
+        );
+    }
 }
 
 export default TextAreaX;
