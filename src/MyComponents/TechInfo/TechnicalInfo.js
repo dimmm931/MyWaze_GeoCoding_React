@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import '../../css/Technical_Info.css';
-import State_Array_List_Builder from '../Build_List_from_State_Array/State_Array_List_Builder';  //Component creates List from State Array
-import LiftedFrom_Component from '../LiftUpComponent/LiftedFrom_Component';
-import LiftedTo_Component from '../LiftUpComponent/LiftedTo_Component';
+import StateArrayListBuilder from '../Build_List_from_State_Array/State_Array_List_Builder';  //Component creates List from State Array
+import LiftedFromComponent from '../LiftUpComponent/LiftedFrom_Component';
+import LiftedToComponent from '../LiftUpComponent/LiftedTo_Component';
+import $ from 'jquery';
+
 
 class Technical_Info extends Component {
 	constructor(props) {
@@ -38,12 +40,12 @@ class Technical_Info extends Component {
                   <span className="caret"></span>
 			  </button> {/*caret down*/}  
               <div className="collapse col-sm-12 col-xs-12 text-left" id="collapseExample">
-			         <p className="underline"> Alerts Replacer: </p>
-				     {constructed_answer} {/* alerts goes there */}
+			      <p className="underline"> Alerts Replacer: </p>
+				  {constructed_answer} {/* alerts goes there */}
 					 
-					 <LiftedFrom_Component handleToUpdate = {handleToUpdate.bind(this)}/> { /* LiftedComponent component, send/uplift value onClick to App.js */ }
-					 <LiftedTo_Component liftedValue={this.props.numbers}/>               { /* LiftedComponent component for catching lifted state from LiftedFrom_Component to App.js */ }
-					 <State_Array_List_Builder numbers={this.props.numbers}/>           {/*techInfoHandler={techInfoHandler.bind(this)}*/}   {/* Component creates List from State Array*/}
+				  <LiftedFromComponent handleToUpdate = {handleToUpdate.bind(this)}/> { /* LiftedComponent component, send/uplift value onClick to App.js */ }
+				  <LiftedToComponent liftedValue={this.props.numbers}/>               { /* LiftedComponent component for catching lifted state from LiftedFrom_Component to App.js */ }
+				  <StateArrayListBuilder numbers={this.props.numbers}/>               {/*techInfoHandler={techInfoHandler.bind(this)}*/}   {/* Component creates List from State Array*/}
               </div> 
           </div>
 	  

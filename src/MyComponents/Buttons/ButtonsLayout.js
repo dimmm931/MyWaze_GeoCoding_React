@@ -27,7 +27,7 @@ class ButtonsLayout extends Component {
 	 $("#instructionButton").val("instructions");
 	 $("#copyButton").hide(1000); //hide copy button Component
 	 // calling parent method from child {this.props. + method}-> passing/uplifting array with found coords, described in Parent App.js
-	 this.props.clearStateHandler('xText');//!!!!!!!!!!!!!   
+	 //this.props.clearStateHandler('xText');//!!!!!!!!!!!!!   
   }
   
    InstructClick() {
@@ -41,8 +41,8 @@ class ButtonsLayout extends Component {
    }
   
   render() {
-      var clearStateHandler =  this.props.clearStateHandler; //lifting state up to parent
-	  var handleToUpdate  = this.props.handleToUpdate
+      //var clearStateHandler =  this.props.clearStateHandler; //lifting state up to parent
+	  //var handleToUpdate  = this.props.handleToUpdate
       return (
 	  
 	    <div className="buttons">

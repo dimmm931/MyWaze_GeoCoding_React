@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import TrendTopic from './TrendTopic';
 
 class LiftedTo_Component extends Component {
 	constructor(props) {

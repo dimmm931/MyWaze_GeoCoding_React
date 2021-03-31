@@ -6,33 +6,34 @@ import ButtonsLayout from './MyComponents/Buttons/ButtonsLayout';
 import Instructions from './MyComponents/Instructions/Instructions';
 import Results from './MyComponents/Result/Results';
 import TextAreaX from './MyComponents/TextArea/TextArea';
-import LiftedFrom_Component from './MyComponents/LiftUpComponent/LiftedFrom_Component';
+//import LiftedFrom_Component from './MyComponents/LiftUpComponent/LiftedFrom_Component';
 import ErrorLayout from './MyComponents/Error/ErrorLayout';  //display error gif
-import Technical_Info from './MyComponents/Tech_Info/Technical_Info';  //displays info instead of alert
+import TechnicalInfo from './MyComponents/TechInfo/TechnicalInfo';  //displays info instead of alert
 
 class App extends Component {
     constructor(props) {
         super(props);
 		
 		this.state = {
-		    arg1: [],  //this state will hold lifted up var(onClick) or array with coordinates
+		    arg1: [],             //this state will hold lifted up var(onClick) or array with coordinates
 		    finalCoords:[], 
-			techInfoState:[], //state to store alert info
-			baseState : [],
-            
-			exampleCoords: '',    //stores example coords, when user clicks "Example" in ButtonsLayout
-			ifAjaxSuccess: false, // if ajax was OK
-			ifAjaxFailed:  false,
-			errMessage: 'Error msg'
+		    techInfoState:[],     //state to store alert info
+		    baseState : [],
+		    exampleCoords: '',    //stores example coords, when user clicks "Example" in ButtonsLayout
+		    ifAjaxSuccess: false, // if ajax was OK
+		    ifAjaxFailed:  false,
+		    errMessage: 'Error msg'
         };
 	   
+       /*
         var handleToUpdate = this.handleToUpdate.bind(this);  //for catching lifted state from LiftedFrom_Component
-		var liftFinalCoordsHandler = this.liftFinalCoordsHandler.bind(this);  //for catching lifted state from TextArea Comp
-		var clearStateHandler = this.clearStateHandler.bind(this);  //cathes lifted state from Buttons layout - //for lifting and clearing the state up in the parent
-		var techInfoHandler = this.techInfoHandler.bind(this);  //for lifting techInfo(instead of alerts)the state up in the parent
+	    var liftFinalCoordsHandler = this.liftFinalCoordsHandler.bind(this);  //for catching lifted state from TextArea Comp
+	    var clearStateHandler = this.clearStateHandler.bind(this);  //cathes lifted state from Buttons layout - //for lifting and clearing the state up in the parent
+	    var techInfoHandler = this.techInfoHandler.bind(this);  //for lifting techInfo(instead of alerts)the state up in the parent
         var reset_techInfo_State = this.reset_techInfo_State.bind(this);  //
         var liftErrorMsgHandler = this.liftErrorMsgHandler.bind(this);		
-
+       */
+       
         // preserve the initial state in a new object
         this.baseState = [];  		
     } 
@@ -60,8 +61,8 @@ class App extends Component {
 		alertTempArray.push(techAlert); //adds to array in this way: addressArray = [[arrayX2]];
 		//sets new value to state
 		this.setState({ 
-           techInfoState: alertTempArray
-       }); 
+            techInfoState: alertTempArray
+        }); 
 	}
 	
 	
@@ -140,7 +141,7 @@ class App extends Component {
 							liftErrorMsgHandler         = {liftErrorMsgHandler.bind(this)}  
 							liftIfAjaxWasSuccessHandler = {liftIfAjaxWasSuccessHandler.bind(this)} />
 							
-						<Technical_Info techInfoData={this.state.techInfoState}  numbers={this.state.arg1}  handleToUpdate = {handleToUpdate.bind(this)} /> { /* displays info instead of alert */ }
+						<TechnicalInfo techInfoData={this.state.techInfoState}  numbers={this.state.arg1}  handleToUpdate = {handleToUpdate.bind(this)} /> { /* displays info instead of alert */ }
 		                <p> Ajax Status: {this.state.ifAjaxSuccess ? ' true' : 'false'}</p>
 					</div>
 					

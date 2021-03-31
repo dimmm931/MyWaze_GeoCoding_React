@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import error from '../../images/error.gif';
+//import error from '../../images/error.gif';
 import '../../css/TextArea.css';
 import $ from 'jquery';
 import axios from 'axios';
@@ -158,7 +158,7 @@ class TextAreaX extends Component {
 		for (let j = 0; j < this.state.addressArray[0].length; j++) { 
             promises.push(axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.addressArray[0][j] + '.json?country=us&access_token=' + process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN)   
             .then(function (response) {
-			    if(response.statusText == "OK"){
+			    if(response.statusText === "OK"){
                     temp.push(response.data.features[0].center[1], response.data.features[0].center[0]);
                     thatX.props.liftErrorMsgHandler("Request was successfull"); //send to App.js state
 			    } else { 
